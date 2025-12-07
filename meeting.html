@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏢 Meeting Options</title>
+<style>
+body{font-family:Poppins,sans-serif;margin:0;background:#f9fafb;text-align:center;}
+header{background:linear-gradient(90deg,#ff7e5f,#feb47b);color:white;padding:20px;}
+main{margin:20px auto;max-width:600px;}
+.option{background:#f0f4f8;margin:10px;padding:15px;border-radius:10px;cursor:pointer;border:2px solid transparent;}
+.option.selected{border-color:#ff7e5f;background:#ffe5d4;}
+button{padding:12px 15px;margin:10px;font-size:16px;border:none;border-radius:8px;background:#ff7e5f;color:white;cursor:pointer;}
+button:hover{background:#feb47b;}
+</style>
+</head>
+<body>
+<header>
+<h1>🏢 Meeting Options</h1>
+</header>
+<main>
+<div class="option" data-name="📋 Agenda" data-amount="1000">📋 Agenda - ₹1000</div>
+<div class="option" data-name="💻 Projector" data-amount="3000">💻 Projector - ₹3000</div>
+<div class="option" data-name="☕ Refreshments" data-amount="1500">☕ Refreshments - ₹1500</div>
+<div class="option" data-name="🪑 Chairs" data-amount="2000">🪑 Chairs - ₹2000</div>
+
+<button id="addEvent">Add Event</button>
+<button onclick="location.href='index.html'">⬅ Back</button>
+
+<h2>Upcoming Events</h2>
+<div id="eventList"></div>
+
+<script>
+const options=document.querySelectorAll('.option');
+options.forEach(o=>o.addEventListener('click',()=>o.classList.toggle('selected')));
+
+function loadEvents(){
+  const events=JSON.parse(localStorage.getItem('events'))||[];
+  const list=document.getElementById('eventList');
+  list.innerHTML='';
+  events.forEach((e,i)=>{
+    if(e.type==='Meeting'){
+      const div=document.createElement('div');
+      div.style.background='#edf2f7'; div.style.margin='10px'; div.style.padding='10px'; div.style.borderRadius='8px';
+      div.innerHTML=`<b>${e.name} (${e.type})</b><br>Date:${e.date} Time:${e.time}<br>Options:<ul>${e.subOptions.map(s=>`<li>${s.name}: ₹${s.amount}</li>`).join('')}</ul><button onclick="deleteEvent(${i})">Delete</button>`;
+      list.appendChild(div);
+    }
+  });
+}
+
+function deleteEvent(index){
+  const events=JSON.parse(localStorage.getItem('events'))||[];
+  events.splice(index,1);
+  localStorage.setItem('events',JSON.stringify(events));
+  loadEvents();
+}
+
+document.getElementById('addEvent').addEventListener('click',()=>{
+  const name=prompt('Enter Event Name');
+  const date=prompt('Enter Date (YYYY-MM-DD)');
+  const time=prompt('Enter Time (HH:MM)');
+  if(!name||!date||!time){alert('Fill all fields'); return;}
+  const selected=Array.from(document.querySelectorAll('.option.selected')).map(o=>({name:o.dataset.name,amount:o.dataset.amount}));
+  const eObj={name,date,time,type:'Meeting',subOptions:selected};
+  const events=JSON.parse(localStorage.getItem('events'))||[];
+  events.push(eObj);
+  localStorage.setItem('events',JSON.stringify(events));
+  options.forEach(o=>o.classList.remove('selected'));
+  loadEvents();
+});
+
+loadEvents();
+</script>
+</body>
+</html>

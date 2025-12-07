@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>abc Event Organizer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #f0f8ff, #e6e6fa);
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #4CAF50;
+      color: white;
+      padding: 20px;
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    form {
+      max-width: 400px;
+      margin: 40px auto;
+      padding: 20px;
+      background-color: #ffffffcc;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <header>abc Event Organizer</header>
+
+  <form id="userForm">
+    <label>Full Name:</label>
+    <input type="text" id="fullName" placeholder="Enter your full name" required>
+
+    <label>Event Date:</label>
+    <input type="date" id="eventDate" required>
+
+    <label>Phone Number:</label>
+    <input type="tel" id="phone" placeholder="Enter your phone number" required>
+
+    <button type="submit">Next</button>
+  </form>
+
+  <script>
+    document.getElementById('userForm').addEventListener('submit', function(e){
+      e.preventDefault(); // Prevent straight navigation
+
+      const name = document.getElementById('fullName').value;
+      const eventDate = document.getElementById('eventDate').value;
+      const phone = document.getElementById('phone').value;
+
+      // Save user info in localStorage
+      localStorage.setItem('fullName', name);
+      localStorage.setItem('eventDate', eventDate);
+      localStorage.setItem('phone', phone);
+
+      // Navigate to event selection page
+      window.location.href = 'index.html';
+    });
+  </script>
+</body>
+</html>
